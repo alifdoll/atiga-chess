@@ -17,8 +17,18 @@ public class Rook : Piece
         }
     }
 
-    public override string TestType()
+
+    public override List<Vector2Int> Move(int tileX, int tileY)
     {
-        return "Rook";
+        var yMovementPost = base.GenerateCoordinate(team, 0, 1, tileX, tileY);
+        var xMovementPost = base.GenerateCoordinate(team, 1, 0, tileX, tileY);
+
+        var yMovementNeg = base.GenerateCoordinate(team, 0, -1, tileX, tileY);
+        var xMovementNeg = base.GenerateCoordinate(team, -1, 0, tileX, tileY);
+
+        xMovementPost.AddRange(yMovementPost);
+        xMovementPost.AddRange(xMovementNeg);
+        xMovementPost.AddRange(yMovementNeg);
+        return xMovementPost;
     }
 }

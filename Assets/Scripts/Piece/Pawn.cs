@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Pawn : Piece
 {
+    private int movement = 2;
+
     public override void SetupPiece(Color32 teamColor)
     {
         base.SetupPiece(teamColor);
@@ -17,8 +19,10 @@ public class Pawn : Piece
         }
     }
 
-    public override string TestType()
+    public override List<Vector2Int> Move(int tileX, int tileY)
     {
-        return "Pawn";
+        int tempMove = movement;
+        if (movement == 2) movement--;
+        return base.GenerateCoordinate(team, 0, 1, tileX, tileY, movement: tempMove);
     }
 }
