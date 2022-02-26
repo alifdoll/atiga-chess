@@ -17,8 +17,31 @@ public class Queen : Piece
         }
     }
 
-    public override string TestType()
+    public override List<Vector2Int> Move(int tileX, int tileY)
     {
-        return "Queen";
+        var horizontalRight = base.GenerateCoordinate(team, 1, 0, tileX, tileY);
+        var horizontalLeft = base.GenerateCoordinate(team, -1, 0, tileX, tileY);
+
+        var verticalUp = base.GenerateCoordinate(team, 0, 1, tileX, tileY);
+        var verticalDown = base.GenerateCoordinate(team, 0, -1, tileX, tileY);
+
+        var diagonalUpRight = base.GenerateCoordinate(team, 1, 1, tileX, tileY);
+        var diagonalUpLeft = base.GenerateCoordinate(team, -1, 1, tileX, tileY);
+
+        var diagonalDownLeft = base.GenerateCoordinate(team, -1, -1, tileX, tileY);
+        var diagonalDownRight = base.GenerateCoordinate(team, 1, -1, tileX, tileY);
+
+        horizontalLeft.AddRange(horizontalRight);
+
+        horizontalLeft.AddRange(verticalUp);
+        horizontalLeft.AddRange(verticalDown);
+
+        horizontalLeft.AddRange(diagonalUpRight);
+        horizontalLeft.AddRange(diagonalUpLeft);
+
+        horizontalLeft.AddRange(diagonalDownLeft);
+        horizontalLeft.AddRange(diagonalDownRight);
+
+        return horizontalLeft;
     }
 }

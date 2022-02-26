@@ -28,7 +28,7 @@ public class GridManager : MonoBehaviour
 
     private string[] pieceOrder = new string[16] {
     "P","P","P","P","P","P","P","P",
-    "R","K","B","Q","KG","B","K","R"
+    "R","K","B","KG","Q","B","K","R"
     };
 
     private Dictionary<string, Type> pieceMap = new Dictionary<string, Type>() {

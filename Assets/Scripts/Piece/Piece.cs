@@ -57,31 +57,13 @@ public class Piece : MonoBehaviour
         return paths;
     }
 
-
-    // public virtual List<Vector2Int> Move(int tileX, int tileY)
-    // {
-
-    //     for (int i = -1; i < 2; i++)
-    //     {
-    //         int moveX = i + tileX;// DIUBAH 
-    //         int moveY = tileY + yMove;// DIUBAH
-    //         if (moveX < 0 || moveX > 7)
-    //         {
-    //             continue;
-    //         }
-    //         GameObject tile = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTileAtPosition(moveX, moveY);
-    //         tile.GetComponent<Tile>().State = ValidatePath(tile);
-    //         paths.Add(new Vector2Int(moveX, moveY));
-    //     }
-    //     return paths;
-    // }
-    public TileState ValidatePath(GameObject tile)
+    public TileState.State ValidatePath(GameObject tile)
     {
         if (tile.transform.childCount < 3)
         {
-            return TileState.Available;
+            return TileState.State.Available;
         }
-        return TileState.Unavailable;
+        return TileState.State.Unavailable;
     }
 
 

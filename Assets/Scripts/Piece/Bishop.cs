@@ -18,8 +18,19 @@ public class Bishop : Piece
     }
 
 
-    // public override List<Vector2Int> Move(int x, int y)
-    // {
-    //     return base.Move(x, y);
-    // }
+    public override List<Vector2Int> Move(int tileX, int tileY)
+    {
+        var diagonalUpRight = base.GenerateCoordinate(team, 1, 1, tileX, tileY);
+        var diagonalUpLeft = base.GenerateCoordinate(team, -1, 1, tileX, tileY);
+
+        var diagonalDownRight = base.GenerateCoordinate(team, 1, -1, tileX, tileY);
+        var diagonalDownLeft = base.GenerateCoordinate(team, -1, -1, tileX, tileY);
+
+        diagonalUpRight.AddRange(diagonalUpLeft);
+        diagonalUpRight.AddRange(diagonalDownRight);
+        diagonalUpRight.AddRange(diagonalDownLeft);
+
+        return diagonalUpRight;
+
+    }
 }

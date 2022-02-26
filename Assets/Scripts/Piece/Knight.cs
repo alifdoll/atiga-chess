@@ -17,8 +17,29 @@ public class Knight : Piece
         }
     }
 
-    public override string TestType()
+
+    public override List<Vector2Int> Move(int tileX, int tileY)
     {
-        return "Knight";
+        var firstL = base.GenerateCoordinate(team, 1, 2, tileX, tileY, true, 1);
+        var secondL = base.GenerateCoordinate(team, -1, 2, tileX, tileY, true, 1);
+
+        var thirdL = base.GenerateCoordinate(team, 2, 1, tileX, tileY, true, 1);
+        var fourthL = base.GenerateCoordinate(team, -2, 1, tileX, tileY, true, 1);
+
+        var fifthL = base.GenerateCoordinate(team, 2, -1, tileX, tileY, true, 1);
+        var sixthL = base.GenerateCoordinate(team, -2, -1, tileX, tileY, true, 1);
+
+        var seventhL = base.GenerateCoordinate(team, 1, -2, tileX, tileY, true, 1);
+        var eighthL = base.GenerateCoordinate(team, -1, -2, tileX, tileY, true, 1);
+
+        firstL.AddRange(secondL);
+        firstL.AddRange(thirdL);
+        firstL.AddRange(fourthL);
+        firstL.AddRange(fifthL);
+        firstL.AddRange(sixthL);
+        firstL.AddRange(seventhL);
+        firstL.AddRange(eighthL);
+
+        return firstL;
     }
 }
