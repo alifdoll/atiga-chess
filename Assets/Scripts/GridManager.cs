@@ -183,7 +183,7 @@ public class GridManager : MonoBehaviour
         {
             Vector2Int path = listPath[i];
             Tile tile = tilePositions[path.x, path.y].GetComponent<Tile>();
-            if (tile.State != TileState.Unavailable)
+            if (tile.State != TileState.State.Unavailable)
             {
                 tile.GetComponent<Tile>().ActivateHighlight(piece);
             }

@@ -4,14 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public enum TileState
-{
-    Available,
-    Unavailable,
-    MoveTile,
-    OutOfBounds,
-    Enemy
-}
+
 public class Tile : MonoBehaviour
 {
     #region Properties and Stuff
@@ -25,13 +18,13 @@ public class Tile : MonoBehaviour
     private int x = 0;
     private int y = 0;
 
-    private TileState state = TileState.Unavailable;
+    private TileState.State state = TileState.State.Unavailable;
 
     private GameObject selectedPiece = null;
 
     public int X { get => x; set => x = value; }
     public int Y { get => y; set => y = value; }
-    internal TileState State { get => state; set => state = value; }
+    internal TileState.State State { get => state; set => state = value; }
     public GameObject SelectedPiece { get => selectedPiece; set => selectedPiece = value; }
 
 
@@ -47,7 +40,7 @@ public class Tile : MonoBehaviour
 
     public void ActivateHighlight(GameObject piece)
     {
-        this.state = TileState.MoveTile;
+        this.state = TileState.State.MoveTile;
         plate.SetActive(true);
         this.SelectedPiece = piece;
     }
@@ -85,7 +78,7 @@ public class Tile : MonoBehaviour
     {
         Debug.Log(this.state);
         var gridManager = GetGridManager();
-        if (this.State == TileState.Unavailable)
+        if (this.State == TileState.State.Unavailable)
         {
             GameObject chessObj = gameObject.transform.GetChild(2).gameObject;
             gridManager.movePaths = CreatePath();
@@ -93,12 +86,12 @@ public class Tile : MonoBehaviour
             FindObjectOfType<GridManager>().GetComponent<GridManager>().ActivatePath(gridManager.movePaths, chessObj);
             Debug.Log(gridManager.movePaths.Count);
         }
-        else if (this.State == TileState.MoveTile)
+        else if (this.State == TileState.State.MoveTile)
         {
             GameObject selectedPiece = this.SelectedPiece;
             selectedPiece.transform.position = gameObject.transform.position;
             selectedPiece.transform.SetParent(gameObject.transform);
-            this.State = TileState.Unavailable;
+            this.State = TileState.State.Unavailable;
             GetGridManager().DeactivatePath(gridManager.movePaths);
         }
     }
