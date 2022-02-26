@@ -165,11 +165,14 @@ public class GridManager : MonoBehaviour
 
     public GameObject GetTileAtPosition(int x, int y)
     {
-        if (tilePositions[x, y] != null)
+        try
         {
             return tilePositions[x, y];
         }
-        return null;
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 
     // Masi ada error tapi sudah bisa!!!!!!!!!!!

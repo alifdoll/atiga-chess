@@ -31,19 +31,26 @@ public class Piece : MonoBehaviour
     }
     public virtual List<Vector2Int> Move(int tileX, int tileY)
     {
-        return GenerateCoordinate(team, 0, 1, tileX, tileY, 2);
+        return GenerateCoordinate(team, 0, 1, tileX, tileY, false, 2);
     }
 
-    public List<Vector2Int> GenerateCoordinate(Color team, int xmove, int ymove, int xpos, int ypos, int movement = 16)
+    protected virtual List<Vector2Int> GenerateCoordinate(Color team, int xmove, int ymove, int xpos, int ypos, bool canSkip = false, int movement = 16)
     {
         ymove = (team == Color.white) ? ymove : -ymove;
         List<Vector2Int> paths = new List<Vector2Int>();
-        for (int i = 1; i < movement; i++)
+        for (int i = 1; i <= movement; i++)
         {
             xpos += xmove;
             ypos += ymove;
             GameObject tile = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTileAtPosition(xpos, ypos);
             if (tile == null) continue;
+            if (!canSkip)
+            {
+                if (tile.transform.childCount >= 3)
+                {
+                    break;
+                }
+            }
             tile.GetComponent<Tile>().State = ValidatePath(tile);
             paths.Add(new Vector2Int(xpos, ypos));
         }
