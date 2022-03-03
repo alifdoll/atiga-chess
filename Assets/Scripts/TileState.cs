@@ -4,10 +4,11 @@ public class TileState : MonoBehaviour
 {
     public enum State
     {
+        Occupied,
         Available,
         Unavailable,
         MoveTile,
         OutOfBounds,
-        Enemy
+        Enemy,
     }
 }

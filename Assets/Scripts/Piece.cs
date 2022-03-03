@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class Piece : MonoBehaviour
 {
     // Team Bidak
-    protected Color32 team;
+    public Color32 team;
 
     protected GameObject currentTile = null;
 
@@ -15,12 +15,6 @@ public class Piece : MonoBehaviour
         // Set Team Bidak
         team = teamColor;
     }
-
-    public virtual string TestType()
-    {
-        return "Piece";
-    }
-
 
     public void Place(GameObject tile)
     {
@@ -38,8 +32,10 @@ public class Piece : MonoBehaviour
     {
         ymove = (team == Color.white) ? ymove : -ymove;
         List<Vector2Int> paths = new List<Vector2Int>();
-        for (int i = 1; i <= movement; i++)
+        int enemy = 0;
+        for (int i = 1; i <= movement + 1; i++)
         {
+            if (enemy > 0) break;
             xpos += xmove;
             ypos += ymove;
             GameObject tile = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTileAtPosition(xpos, ypos);
@@ -48,7 +44,12 @@ public class Piece : MonoBehaviour
             {
                 if (tile.transform.childCount >= 3)
                 {
-                    break;
+                    enemy++;
+                    var checkpiece = tile.transform.GetChild(2).GetComponent<Piece>();
+                    // if (checkpiece.team == team)
+                    // {
+                    //     break;
+                    // }
                 }
             }
             tile.GetComponent<Tile>().State = ValidatePath(tile);
@@ -63,7 +64,26 @@ public class Piece : MonoBehaviour
         {
             return TileState.State.Available;
         }
-        return TileState.State.Unavailable;
+        else if (tile.transform.childCount == 3)
+        {
+            var check = tile.transform.GetChild(2).GetComponent<Piece>();
+
+            if ((Color)check.team == this.team)
+            {
+                return TileState.State.Unavailable;
+            }
+            else
+            {
+                return TileState.State.Enemy;
+            }
+
+        }
+        else
+        {
+            Debug.Log("test enemy");
+            return TileState.State.OutOfBounds;
+        }
+
     }
 
 

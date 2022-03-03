@@ -16,7 +16,7 @@ public class GridManager : MonoBehaviour
 
     private GameObject[,] tilePositions = new GameObject[8, 8];
 
-    private GameObject[,] chessPositions = new GameObject[8, 8];
+    private GameObject[,] destroyedChessPiece = new GameObject[8, 8];
 
     private GameObject[] playerBlack = new GameObject[16];
     private GameObject[] playerWhite = new GameObject[16];
@@ -40,9 +40,13 @@ public class GridManager : MonoBehaviour
         {"KG", typeof(King)},
     };
 
-    private string currentPlayer = "white";
-    private bool isKingDie = false;
+    public Color currentPlayer = Color.white;
+
+    public bool isKingDie = false;
     #endregion
+
+
+    #region grid generator
 
     private void Start()
     {
@@ -150,6 +154,7 @@ public class GridManager : MonoBehaviour
             playerChess[i + 8].transform.SetParent(chessBoard[i, royalty].transform);
         }
     }
+    #endregion
 
 
 
@@ -195,7 +200,6 @@ public class GridManager : MonoBehaviour
     {
         for (int i = 0; i < listPath.Count; i++)
         {
-            Debug.Log("Deactivate");
             Vector2Int path = listPath[i];
             Tile tile = tilePositions[path.x, path.y].GetComponent<Tile>();
             tile.GetComponent<Tile>().DeactivateHighlight();

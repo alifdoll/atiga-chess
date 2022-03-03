@@ -35,20 +35,28 @@ public class Tile : MonoBehaviour
         this.y = yVal;
         tileRenderer = gameObject.GetComponent<SpriteRenderer>();
         if (isOffset) tileRenderer.color = Color.white;
-        else tileRenderer.color = Color.red;
+        else tileRenderer.color = Color.blue;
     }
 
     public void ActivateHighlight(GameObject piece)
     {
-        this.state = TileState.State.MoveTile;
-        plate.SetActive(true);
+        Debug.Log(this.state);
+        if (this.state == TileState.State.Enemy)
+        {
+            gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/plate_red");
+        }
+        else
+        {
+            this.state = TileState.State.MoveTile;
+        }
         this.SelectedPiece = piece;
+        plate.SetActive(true);
     }
 
     public void DeactivateHighlight()
     {
-        Debug.Log("deactivate");
-        // this.state = TileState.Unavailable;
+
+        this.state = TileState.State.Unavailable;
         plate.SetActive(false);
     }
 
@@ -57,11 +65,21 @@ public class Tile : MonoBehaviour
         return FindObjectOfType<GridManager>().GetComponent<GridManager>();
     }
 
+    public Piece GetPiece()
+    {
+        return gameObject.transform.GetChild(2).gameObject.GetComponent<Piece>();
+    }
+
     private void OnMouseEnter()
     {
+        // Debug.Log(this.SelectedPiece.GetComponent<Piece>().team);
         if (gameObject.transform.childCount >= 3)
         {
-            highlight.SetActive(true);
+            if (GetGridManager().currentPlayer == GetPiece().team)
+            {
+                highlight.SetActive(true);
+            }
+
         }
     }
 
@@ -76,19 +94,28 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log(this.state);
         var gridManager = GetGridManager();
+
         if (this.State == TileState.State.Unavailable)
         {
             GameObject chessObj = gameObject.transform.GetChild(2).gameObject;
             gridManager.movePaths = CreatePath();
-            var test = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTilePosition(this);
             FindObjectOfType<GridManager>().GetComponent<GridManager>().ActivatePath(gridManager.movePaths, chessObj);
-            Debug.Log(gridManager.movePaths.Count);
         }
         else if (this.State == TileState.State.MoveTile)
         {
             GameObject selectedPiece = this.SelectedPiece;
+            selectedPiece.transform.position = gameObject.transform.position;
+            selectedPiece.transform.SetParent(gameObject.transform);
+            this.State = TileState.State.Unavailable;
+            GetGridManager().DeactivatePath(gridManager.movePaths);
+            GetGridManager().currentPlayer = (GetGridManager().currentPlayer == Color.white) ? Color.black : Color.white;
+        }
+        if (this.state == TileState.State.Enemy)
+        {
+            GameObject selectedPiece = this.SelectedPiece;
+            GameObject enemyPiece = gameObject.transform.GetChild(2).gameObject;
+            Destroy(enemyPiece);
             selectedPiece.transform.position = gameObject.transform.position;
             selectedPiece.transform.SetParent(gameObject.transform);
             this.State = TileState.State.Unavailable;
