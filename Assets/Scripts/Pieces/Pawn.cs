@@ -23,6 +23,72 @@ public class Pawn : Piece
     {
         int tempMove = movement;
         if (movement == 2) movement--;
-        return base.GenerateCoordinate(team, 0, 1, tileX, tileY, movement: tempMove);
+        var paths = GenerateCoordinate(team, 0, 1, tileX, tileY, movement: tempMove);
+        var right = checkEnemyPawn(tileX + 1, tileY + 1);
+        var left = checkEnemyPawn(tileX - 1, tileY + 1);
+        Debug.Log(right);
+
+        if (right || left)
+        {
+            if (right && left)
+            {
+                var rightEnemy = GenerateCoordinate(team, 1, 1, tileX, tileY, movement: 1, canSkip: true);
+                var leftEnemy = GenerateCoordinate(team, -1, 1, tileX, tileY, movement: 1, canSkip: true);
+
+                rightEnemy.AddRange(leftEnemy);
+                return rightEnemy;
+            }
+            else if (left)
+            {
+                return GenerateCoordinate(team, -1, 1, tileX, tileY, movement: 1, canSkip: true);
+            }
+            else
+            {
+                return GenerateCoordinate(team, 1, 1, tileX, tileY, movement: 1, canSkip: true);
+            }
+        }
+        return paths;
+    }
+
+    private bool checkEnemyPawn(int tileX, int tileY)
+    {
+        tileY = (team == Color.white) ? tileY : -tileY;
+        GameObject check = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTileAtPosition(tileX, tileY);
+
+        if (check == null) return false;
+        if (check.transform.childCount >= 3) return true;
+        else return false;
+    }
+
+    public override List<Vector2Int> GenerateCoordinate(Color team, int xmove, int ymove, int xpos, int ypos, bool canSkip = false, int movement = 16)
+    {
+        ymove = (team == Color.white) ? ymove : -ymove;
+        List<Vector2Int> paths = new List<Vector2Int>();
+        int enemy = 0;
+        for (int i = 1; i <= movement; i++)
+        {
+            if (enemy > 0) break;
+            xpos += xmove;
+            ypos += ymove;
+            GameObject tile = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTileAtPosition(xpos, ypos);
+            Debug.Log(tile);
+            if (tile == null) continue;
+            if (!canSkip)
+            {
+                if (tile.transform.childCount >= 3)
+                {
+                    enemy++;
+                    var checkpiece = tile.transform.GetChild(2).GetComponent<Piece>();
+                    if (checkpiece.team != (Color)team)
+                    {
+                        break;
+                    }
+                }
+            }
+            tile.GetComponent<Tile>().State = ValidatePath(tile);
+            Debug.Log(tile.GetComponent<Tile>().State.ToString());
+            paths.Add(new Vector2Int(xpos, ypos));
+        }
+        return paths;
     }
 }

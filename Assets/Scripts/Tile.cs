@@ -55,7 +55,7 @@ public class Tile : MonoBehaviour
 
     public void DeactivateHighlight()
     {
-
+        this.SelectedPiece = null;
         this.state = TileState.State.Unavailable;
         plate.SetActive(false);
     }

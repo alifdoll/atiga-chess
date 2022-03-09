@@ -28,7 +28,7 @@ public class Piece : MonoBehaviour
         return GenerateCoordinate(team, 0, 1, tileX, tileY, false, 2);
     }
 
-    protected virtual List<Vector2Int> GenerateCoordinate(Color team, int xmove, int ymove, int xpos, int ypos, bool canSkip = false, int movement = 16)
+    public virtual List<Vector2Int> GenerateCoordinate(Color team, int xmove, int ymove, int xpos, int ypos, bool canSkip = false, int movement = 16)
     {
         ymove = (team == Color.white) ? ymove : -ymove;
         List<Vector2Int> paths = new List<Vector2Int>();
@@ -42,15 +42,7 @@ public class Piece : MonoBehaviour
             if (tile == null) continue;
             if (!canSkip)
             {
-                if (tile.transform.childCount >= 3)
-                {
-                    enemy++;
-                    var checkpiece = tile.transform.GetChild(2).GetComponent<Piece>();
-                    // if (checkpiece.team == team)
-                    // {
-                    //     break;
-                    // }
-                }
+                if (tile.transform.childCount >= 3) enemy++;
             }
             tile.GetComponent<Tile>().State = ValidatePath(tile);
             paths.Add(new Vector2Int(xpos, ypos));
@@ -60,6 +52,7 @@ public class Piece : MonoBehaviour
 
     public TileState.State ValidatePath(GameObject tile)
     {
+
         if (tile.transform.childCount < 3)
         {
             return TileState.State.Available;
