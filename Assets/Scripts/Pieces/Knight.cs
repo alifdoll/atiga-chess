@@ -20,17 +20,17 @@ public class Knight : Piece
 
     public override List<Vector2Int> Move(int tileX, int tileY)
     {
-        var firstL = base.GenerateCoordinate(team, 1, 2, tileX, tileY, true, 1);
-        var secondL = base.GenerateCoordinate(team, -1, 2, tileX, tileY, true, 1);
+        var firstL = base.GenerateCoordinate(team, 1, 2, tileX, tileY, true, 0);
+        var secondL = base.GenerateCoordinate(team, -1, 2, tileX, tileY, true, 0);
 
-        var thirdL = base.GenerateCoordinate(team, 2, 1, tileX, tileY, true, 1);
-        var fourthL = base.GenerateCoordinate(team, -2, 1, tileX, tileY, true, 1);
+        var thirdL = base.GenerateCoordinate(team, 2, 1, tileX, tileY, true, 0);
+        var fourthL = base.GenerateCoordinate(team, -2, 1, tileX, tileY, true, 0);
 
-        var fifthL = base.GenerateCoordinate(team, 2, -1, tileX, tileY, true, 1);
-        var sixthL = base.GenerateCoordinate(team, -2, -1, tileX, tileY, true, 1);
+        var fifthL = base.GenerateCoordinate(team, 2, -1, tileX, tileY, true, 0);
+        var sixthL = base.GenerateCoordinate(team, -2, -1, tileX, tileY, true, 0);
 
-        var seventhL = base.GenerateCoordinate(team, 1, -2, tileX, tileY, true, 1);
-        var eighthL = base.GenerateCoordinate(team, -1, -2, tileX, tileY, true, 1);
+        var seventhL = base.GenerateCoordinate(team, 1, -2, tileX, tileY, true, 0);
+        var eighthL = base.GenerateCoordinate(team, -1, -2, tileX, tileY, true, 0);
 
         firstL.AddRange(secondL);
         firstL.AddRange(thirdL);

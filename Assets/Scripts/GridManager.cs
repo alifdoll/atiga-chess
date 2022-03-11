@@ -43,10 +43,14 @@ public class GridManager : MonoBehaviour
     public Color currentPlayer = Color.white;
 
     public bool isKingDie = false;
+
+    public GameObject CurrentlySelectedPiece = null;
     #endregion
 
 
     #region grid generator
+
+
 
     private void Start()
     {
@@ -158,6 +162,9 @@ public class GridManager : MonoBehaviour
 
 
 
+    #region methods
+
+
     // PROBLEM DIBAGIAN AKHIR BOARD, LOCATION = 8.400001f
     public Vector2Int GetTilePosition(Tile tile)
     {
@@ -206,5 +213,5 @@ public class GridManager : MonoBehaviour
         }
         movePaths.Clear();
     }
-
+    #endregion
 }

@@ -45,4 +45,10 @@ public class King : Piece
 
         return horizontalLeft;
     }
+
+    public override void Eat()
+    {
+        FindObjectOfType<GridManager>().GetComponent<GridManager>().isKingDie = true;
+        Destroy(gameObject);
+    }
 }

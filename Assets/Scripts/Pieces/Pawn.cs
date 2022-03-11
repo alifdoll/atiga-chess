@@ -24,9 +24,8 @@ public class Pawn : Piece
         int tempMove = movement;
         if (movement == 2) movement--;
         var paths = GenerateCoordinate(team, 0, 1, tileX, tileY, movement: tempMove);
-        var right = checkEnemyPawn(tileX + 1, tileY + 1);
-        var left = checkEnemyPawn(tileX - 1, tileY + 1);
-        Debug.Log(right);
+        var right = checkEnemyPawn(tileX + 1, tileY);
+        var left = checkEnemyPawn(tileX - 1, tileY);
 
         if (right || left)
         {
@@ -52,7 +51,7 @@ public class Pawn : Piece
 
     private bool checkEnemyPawn(int tileX, int tileY)
     {
-        tileY = (team == Color.white) ? tileY : -tileY;
+        tileY = (team == Color.white) ? tileY + 1 : tileY - 1;
         GameObject check = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTileAtPosition(tileX, tileY);
 
         if (check == null) return false;
@@ -71,7 +70,6 @@ public class Pawn : Piece
             xpos += xmove;
             ypos += ymove;
             GameObject tile = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTileAtPosition(xpos, ypos);
-            Debug.Log(tile);
             if (tile == null) continue;
             if (!canSkip)
             {
@@ -86,7 +84,6 @@ public class Pawn : Piece
                 }
             }
             tile.GetComponent<Tile>().State = ValidatePath(tile);
-            Debug.Log(tile.GetComponent<Tile>().State.ToString());
             paths.Add(new Vector2Int(xpos, ypos));
         }
         return paths;

@@ -29,6 +29,8 @@ public class Tile : MonoBehaviour
 
 
     #endregion
+
+
     public void Init(bool isOffset, int xVal, int yVal)
     {
         this.x = xVal;
@@ -40,7 +42,6 @@ public class Tile : MonoBehaviour
 
     public void ActivateHighlight(GameObject piece)
     {
-        Debug.Log(this.state);
         if (this.state == TileState.State.Enemy)
         {
             gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/plate_red");
@@ -49,13 +50,13 @@ public class Tile : MonoBehaviour
         {
             this.state = TileState.State.MoveTile;
         }
-        this.SelectedPiece = piece;
+        GetGridManager().CurrentlySelectedPiece = piece;
         plate.SetActive(true);
     }
 
     public void DeactivateHighlight()
     {
-        this.SelectedPiece = null;
+        GetGridManager().CurrentlySelectedPiece = null;
         this.state = TileState.State.Unavailable;
         plate.SetActive(false);
     }
@@ -98,29 +99,46 @@ public class Tile : MonoBehaviour
 
         if (this.State == TileState.State.Unavailable)
         {
-            GameObject chessObj = gameObject.transform.GetChild(2).gameObject;
-            gridManager.movePaths = CreatePath();
-            FindObjectOfType<GridManager>().GetComponent<GridManager>().ActivatePath(gridManager.movePaths, chessObj);
+
+            if (GetGridManager().CurrentlySelectedPiece == null)
+            {
+                GameObject chessObj = gameObject.transform.GetChild(2).gameObject;
+                gridManager.movePaths = CreatePath();
+                gridManager.GetComponent<GridManager>().ActivatePath(gridManager.movePaths, chessObj);
+                gridManager.CurrentlySelectedPiece = gameObject.transform.GetChild(2).gameObject;
+            }
+            else
+            {
+                gridManager.DeactivatePath(gridManager.movePaths);
+                gridManager.CurrentlySelectedPiece = gameObject.transform.GetChild(2).gameObject;
+                gridManager.movePaths = CreatePath();
+                gridManager.ActivatePath(gridManager.movePaths, gridManager.CurrentlySelectedPiece);
+            }
+            Debug.Log(GetGridManager().ToString());
+            Debug.Log(GetGridManager().CurrentlySelectedPiece.ToString());
+
         }
         else if (this.State == TileState.State.MoveTile)
         {
-            GameObject selectedPiece = this.SelectedPiece;
-            selectedPiece.transform.position = gameObject.transform.position;
-            selectedPiece.transform.SetParent(gameObject.transform);
+            gridManager.CurrentlySelectedPiece.transform.position = gameObject.transform.position;
+            gridManager.CurrentlySelectedPiece.transform.SetParent(gameObject.transform);
             this.State = TileState.State.Unavailable;
-            GetGridManager().DeactivatePath(gridManager.movePaths);
-            GetGridManager().currentPlayer = (GetGridManager().currentPlayer == Color.white) ? Color.black : Color.white;
+            gridManager.DeactivatePath(gridManager.movePaths);
+            gridManager.currentPlayer = (gridManager.currentPlayer == Color.white) ? Color.black : Color.white;
         }
-        if (this.state == TileState.State.Enemy)
+        else if (this.State == TileState.State.Enemy)
         {
-            GameObject selectedPiece = this.SelectedPiece;
-            GameObject enemyPiece = gameObject.transform.GetChild(2).gameObject;
-            Destroy(enemyPiece);
-            selectedPiece.transform.position = gameObject.transform.position;
-            selectedPiece.transform.SetParent(gameObject.transform);
+            GetPiece().Eat();
+            gridManager.CurrentlySelectedPiece.transform.position = gameObject.transform.position;
+            gridManager.CurrentlySelectedPiece.transform.SetParent(gameObject.transform);
             this.State = TileState.State.Unavailable;
-            GetGridManager().DeactivatePath(gridManager.movePaths);
+            gridManager.DeactivatePath(gridManager.movePaths);
         }
+        else if (this.State == TileState.State.Selected)
+        {
+
+        }
+
     }
 
     // Masi ada error tapi sudah bisa!!!!!!!!!!!
@@ -129,9 +147,7 @@ public class Tile : MonoBehaviour
         List<Vector2Int> paths = new List<Vector2Int>();
         if (gameObject.transform.childCount >= 2)
         {
-            GameObject chessObj = gameObject.transform.GetChild(2).gameObject;
-            Piece chessPiece = chessObj.GetComponent<Piece>();
-
+            Piece chessPiece = GetPiece().GetComponent<Piece>();
             paths = chessPiece.Move(this.x, this.y);
         }
         return paths;

@@ -10,5 +10,6 @@ public class TileState : MonoBehaviour
         MoveTile,
         OutOfBounds,
         Enemy,
+        Selected
     }
 }

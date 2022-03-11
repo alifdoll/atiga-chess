@@ -50,6 +50,11 @@ public class Piece : MonoBehaviour
         return paths;
     }
 
+    public virtual void Eat()
+    {
+        Destroy(gameObject);
+    }
+
     public TileState.State ValidatePath(GameObject tile)
     {
 
