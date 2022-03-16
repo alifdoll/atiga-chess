@@ -97,9 +97,8 @@ public class Tile : MonoBehaviour
     {
         var gridManager = GetGridManager();
 
-        if (this.State == TileState.State.Unavailable)
+        if (this.State == TileState.State.Unavailable && GetGridManager().currentPlayer == GetPiece().team)
         {
-
             if (GetGridManager().CurrentlySelectedPiece == null)
             {
                 GameObject chessObj = gameObject.transform.GetChild(2).gameObject;
@@ -114,8 +113,6 @@ public class Tile : MonoBehaviour
                 gridManager.movePaths = CreatePath();
                 gridManager.ActivatePath(gridManager.movePaths, gridManager.CurrentlySelectedPiece);
             }
-            Debug.Log(GetGridManager().ToString());
-            Debug.Log(GetGridManager().CurrentlySelectedPiece.ToString());
 
         }
         else if (this.State == TileState.State.MoveTile)
