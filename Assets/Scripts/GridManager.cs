@@ -23,7 +23,6 @@ public class GridManager : MonoBehaviour
 
     public List<Vector2Int> movePaths = new List<Vector2Int>();
 
-
     private Dictionary<Vector2, GameObject> tilesMap = new Dictionary<Vector2, GameObject>();
 
     private string[] pieceOrder = new string[16] {
@@ -163,9 +162,6 @@ public class GridManager : MonoBehaviour
 
 
     #region methods
-
-
-    // PROBLEM DIBAGIAN AKHIR BOARD, LOCATION = 8.400001f
     public Vector2Int GetTilePosition(Tile tile)
     {
         if (tilePositions[tile.X, tile.Y] != null)

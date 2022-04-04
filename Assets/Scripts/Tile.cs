@@ -48,6 +48,7 @@ public class Tile : MonoBehaviour
         }
         else
         {
+            gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/plate");
             this.state = TileState.State.MoveTile;
         }
         GetGridManager().CurrentlySelectedPiece = piece;
@@ -66,9 +67,14 @@ public class Tile : MonoBehaviour
         return FindObjectOfType<GridManager>().GetComponent<GridManager>();
     }
 
-    public Piece GetPiece()
+    private Piece GetPiece()
     {
         return gameObject.transform.GetChild(2).gameObject.GetComponent<Piece>();
+    }
+
+    private GameObject GetPieceGameObject()
+    {
+        return gameObject.transform.GetChild(2).gameObject;
     }
 
     private void OnMouseEnter()
@@ -97,7 +103,7 @@ public class Tile : MonoBehaviour
     {
         var gridManager = GetGridManager();
 
-        if (this.State == TileState.State.Unavailable && GetGridManager().currentPlayer == GetPiece().team)
+        if (this.State == TileState.State.Unavailable /*&& GetGridManager().currentPlayer == GetPiece().team*/)
         {
             if (GetGridManager().CurrentlySelectedPiece == null)
             {
@@ -125,7 +131,7 @@ public class Tile : MonoBehaviour
         }
         else if (this.State == TileState.State.Enemy)
         {
-            GetPiece().Eat();
+            Destroy(GetPieceGameObject());
             gridManager.CurrentlySelectedPiece.transform.position = gameObject.transform.position;
             gridManager.CurrentlySelectedPiece.transform.SetParent(gameObject.transform);
             this.State = TileState.State.Unavailable;

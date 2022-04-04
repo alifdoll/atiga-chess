@@ -35,15 +35,20 @@ public class Pawn : Piece
                 var leftEnemy = GenerateCoordinate(team, -1, 1, tileX, tileY, movement: 1, canSkip: true);
 
                 rightEnemy.AddRange(leftEnemy);
+                rightEnemy.AddRange(paths);
                 return rightEnemy;
             }
             else if (left)
             {
-                return GenerateCoordinate(team, -1, 1, tileX, tileY, movement: 1, canSkip: true);
+                var enemy = GenerateCoordinate(team, -1, 1, tileX, tileY, movement: 1, canSkip: true);
+                enemy.AddRange(paths);
+                return enemy;
             }
             else
             {
-                return GenerateCoordinate(team, 1, 1, tileX, tileY, movement: 1, canSkip: true);
+                var enemy = GenerateCoordinate(team, 1, 1, tileX, tileY, movement: 1, canSkip: true);
+                enemy.AddRange(paths);
+                return enemy;
             }
         }
         return paths;

@@ -46,6 +46,8 @@ public class Piece : MonoBehaviour
             }
             tile.GetComponent<Tile>().State = ValidatePath(tile);
             paths.Add(new Vector2Int(xpos, ypos));
+
+            Debug.Log(tile.GetComponent<Tile>().State.ToString());
         }
         return paths;
     }
@@ -57,7 +59,6 @@ public class Piece : MonoBehaviour
 
     public TileState.State ValidatePath(GameObject tile)
     {
-
         if (tile.transform.childCount < 3)
         {
             return TileState.State.Available;
@@ -78,7 +79,6 @@ public class Piece : MonoBehaviour
         }
         else
         {
-            Debug.Log("test enemy");
             return TileState.State.OutOfBounds;
         }
 
