@@ -5,7 +5,7 @@ using UnityEngine;
 public class Pawn : Piece
 {
     private int movement = 2;
-
+    private Vector3 position = new Vector3();
     public override void SetupPiece(Color32 teamColor)
     {
         base.SetupPiece(teamColor);
@@ -19,10 +19,21 @@ public class Pawn : Piece
         }
     }
 
-    public override List<Vector2Int> Move(int tileX, int tileY)
+    public override void Place(GameObject tile)
+    {
+        base.Place(tile);
+        position = gameObject.transform.position;
+    }
+
+    public override List<Vector2Int> CreateMovePath(int tileX, int tileY)
     {
         int tempMove = movement;
-        if (movement == 2) movement--;
+        Debug.Log("Positon awal : " + position.ToString());
+        Debug.Log("Postion new : " + gameObject.transform.position.ToString());
+        if (position != gameObject.transform.position)
+        {
+            movement--;
+        }
         var paths = GenerateCoordinate(team, 0, 1, tileX, tileY, movement: tempMove);
         var right = checkEnemyPawn(tileX + 1, tileY);
         var left = checkEnemyPawn(tileX - 1, tileY);

@@ -18,7 +18,7 @@ public class Rook : Piece
     }
 
 
-    public override List<Vector2Int> Move(int tileX, int tileY)
+    public override List<Vector2Int> CreateMovePath(int tileX, int tileY)
     {
         var yMovementPost = base.GenerateCoordinate(team, 0, 1, tileX, tileY);
         var xMovementPost = base.GenerateCoordinate(team, 1, 0, tileX, tileY);

@@ -144,14 +144,13 @@ public class Tile : MonoBehaviour
 
     }
 
-    // Masi ada error tapi sudah bisa!!!!!!!!!!!
     private List<Vector2Int> CreatePath()
     {
         List<Vector2Int> paths = new List<Vector2Int>();
         if (gameObject.transform.childCount >= 2)
         {
             Piece chessPiece = GetPiece().GetComponent<Piece>();
-            paths = chessPiece.Move(this.x, this.y);
+            paths = chessPiece.CreateMovePath(this.x, this.y);
         }
         return paths;
     }

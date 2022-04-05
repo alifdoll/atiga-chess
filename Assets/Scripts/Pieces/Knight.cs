@@ -18,7 +18,7 @@ public class Knight : Piece
     }
 
 
-    public override List<Vector2Int> Move(int tileX, int tileY)
+    public override List<Vector2Int> CreateMovePath(int tileX, int tileY)
     {
         var firstL = base.GenerateCoordinate(team, 1, 2, tileX, tileY, true, 0);
         var secondL = base.GenerateCoordinate(team, -1, 2, tileX, tileY, true, 0);

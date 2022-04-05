@@ -10,20 +10,22 @@ public class Piece : MonoBehaviour
 
     protected GameObject currentTile = null;
 
+
     public virtual void SetupPiece(Color32 teamColor)
     {
         // Set Team Bidak
         team = teamColor;
     }
 
-    public void Place(GameObject tile)
+    public virtual void Place(GameObject tile)
     {
         // Posisikan bidak pada posisi cell papan catur
         gameObject.transform.position = tile.transform.position;
 
         currentTile = tile;
+
     }
-    public virtual List<Vector2Int> Move(int tileX, int tileY)
+    public virtual List<Vector2Int> CreateMovePath(int tileX, int tileY)
     {
         return GenerateCoordinate(team, 0, 1, tileX, tileY, false, 2);
     }

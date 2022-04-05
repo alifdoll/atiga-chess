@@ -18,7 +18,7 @@ public class Bishop : Piece
     }
 
 
-    public override List<Vector2Int> Move(int tileX, int tileY)
+    public override List<Vector2Int> CreateMovePath(int tileX, int tileY)
     {
         var diagonalUpRight = base.GenerateCoordinate(team, 1, 1, tileX, tileY);
         var diagonalUpLeft = base.GenerateCoordinate(team, -1, 1, tileX, tileY);
