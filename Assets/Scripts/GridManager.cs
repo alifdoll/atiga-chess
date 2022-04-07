@@ -111,7 +111,7 @@ public class GridManager : MonoBehaviour
     private GameObject[] CreatePiece(Color32 teamColor)
     {
         GameObject[] newPiece = new GameObject[16];
-
+        // TILE AVAILABLE WHEN PLACED WITH PIECE
         for (int i = 0; i < newPiece.Length; i++)
         {
             // Buat gameobject nya
@@ -183,7 +183,11 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    // Masi ada error tapi sudah bisa!!!!!!!!!!!
+
+    public Piece GetSelectedPiece()
+    {
+        return CurrentlySelectedPiece.GetComponent<Piece>();
+    }
     public void ActivatePath(List<Vector2Int> listPath, GameObject piece)
     {
         movePaths = listPath;

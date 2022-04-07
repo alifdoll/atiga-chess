@@ -7,7 +7,7 @@ public class TileState : MonoBehaviour
         Occupied,
         Available,
         Unavailable,
-        MoveTile,
+        Move,
         OutOfBounds,
         Enemy,
         Selected

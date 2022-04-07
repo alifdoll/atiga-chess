@@ -10,8 +10,11 @@ public class Tile : MonoBehaviour
     #region Properties and Stuff
     private Color highlightColor = new Color32(213, 237, 251, 255);
 
+    // Debug Purposes
     [SerializeField] private GameObject highlight;
     [SerializeField] private GameObject plate;
+
+    [SerializeField] private TileState.State stateTest;
 
     private SpriteRenderer tileRenderer;
 
@@ -20,17 +23,22 @@ public class Tile : MonoBehaviour
 
     private TileState.State state = TileState.State.Unavailable;
 
-    private GameObject selectedPiece = null;
-
     public int X { get => x; set => x = value; }
     public int Y { get => y; set => y = value; }
     internal TileState.State State { get => state; set => state = value; }
-    public GameObject SelectedPiece { get => selectedPiece; set => selectedPiece = value; }
 
 
     #endregion
 
+    private void Start()
+    {
+        stateTest = this.state;
+    }
 
+    private void Update()
+    {
+        stateTest = this.state;
+    }
     public void Init(bool isOffset, int xVal, int yVal)
     {
         this.x = xVal;
@@ -49,7 +57,7 @@ public class Tile : MonoBehaviour
         else
         {
             gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/plate");
-            this.state = TileState.State.MoveTile;
+            this.state = TileState.State.Move;
         }
         GetGridManager().CurrentlySelectedPiece = piece;
         plate.SetActive(true);
@@ -58,7 +66,10 @@ public class Tile : MonoBehaviour
     public void DeactivateHighlight()
     {
         GetGridManager().CurrentlySelectedPiece = null;
-        this.state = TileState.State.Unavailable;
+        if (transform.childCount < 3)
+        {
+            this.state = TileState.State.Unavailable;
+        }
         plate.SetActive(false);
     }
 
@@ -102,11 +113,13 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         var gridManager = GetGridManager();
+        Debug.Log(this.state.ToString());
 
-        if (this.State == TileState.State.Unavailable /*&& GetGridManager().currentPlayer == GetPiece().team*/)
+        if (this.State == TileState.State.Available /*&& GetGridManager().currentPlayer == GetPiece().team*/)
         {
             if (GetGridManager().CurrentlySelectedPiece == null)
             {
+                this.state = TileState.State.Selected;
                 GameObject chessObj = gameObject.transform.GetChild(2).gameObject;
                 gridManager.movePaths = CreatePath();
                 gridManager.GetComponent<GridManager>().ActivatePath(gridManager.movePaths, chessObj);
@@ -121,11 +134,10 @@ public class Tile : MonoBehaviour
             }
 
         }
-        else if (this.State == TileState.State.MoveTile)
+        else if (this.State == TileState.State.Move)
         {
-            gridManager.CurrentlySelectedPiece.transform.position = gameObject.transform.position;
-            gridManager.CurrentlySelectedPiece.transform.SetParent(gameObject.transform);
-            this.State = TileState.State.Unavailable;
+            gridManager.GetSelectedPiece().Move(gameObject);
+            this.State = TileState.State.Available;
             gridManager.DeactivatePath(gridManager.movePaths);
             gridManager.currentPlayer = (gridManager.currentPlayer == Color.white) ? Color.black : Color.white;
         }
@@ -139,7 +151,9 @@ public class Tile : MonoBehaviour
         }
         else if (this.State == TileState.State.Selected)
         {
-
+            gridManager.DeactivatePath(gridManager.movePaths);
+            gridManager.CurrentlySelectedPiece = null;
+            this.state = TileState.State.Available;
         }
 
     }

@@ -8,7 +8,8 @@ public class Piece : MonoBehaviour
     // Team Bidak
     public Color32 team;
 
-    protected GameObject currentTile = null;
+
+    [SerializeField] protected GameObject currentTile = null;
 
 
     public virtual void SetupPiece(Color32 teamColor)
@@ -23,7 +24,16 @@ public class Piece : MonoBehaviour
         gameObject.transform.position = tile.transform.position;
 
         currentTile = tile;
+        tile.GetComponent<Tile>().State = TileState.State.Available;
 
+    }
+
+    public virtual void Move(GameObject selectedTile)
+    {
+        currentTile.GetComponent<Tile>().State = TileState.State.Unavailable;
+        this.transform.position = selectedTile.transform.position;
+        this.transform.SetParent(selectedTile.transform);
+        currentTile = selectedTile;
     }
     public virtual List<Vector2Int> CreateMovePath(int tileX, int tileY)
     {
@@ -71,7 +81,7 @@ public class Piece : MonoBehaviour
 
             if ((Color)check.team == this.team)
             {
-                return TileState.State.Unavailable;
+                return TileState.State.Available;
             }
             else
             {
@@ -81,7 +91,7 @@ public class Piece : MonoBehaviour
         }
         else
         {
-            return TileState.State.OutOfBounds;
+            return TileState.State.Unavailable;
         }
 
     }
