@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Rook : Piece
 {
-    public override void SetupPiece(Color32 teamColor)
+    public override void SetupTeamColor(Color32 teamColor)
     {
-        base.SetupPiece(teamColor);
+        base.SetupTeamColor(teamColor);
         if (teamColor == Color.white)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/w_rook");
@@ -20,15 +20,15 @@ public class Rook : Piece
 
     public override List<Vector2Int> CreateMovePath(int tileX, int tileY)
     {
-        var yMovementPost = base.GenerateCoordinate(team, 0, 1, tileX, tileY);
-        var xMovementPost = base.GenerateCoordinate(team, 1, 0, tileX, tileY);
+        var y_move_pos = base.GenerateCoordinate(0, 1, tileX, tileY);
+        var x_move_pos = base.GenerateCoordinate(1, 0, tileX, tileY);
 
-        var yMovementNeg = base.GenerateCoordinate(team, 0, -1, tileX, tileY);
-        var xMovementNeg = base.GenerateCoordinate(team, -1, 0, tileX, tileY);
+        var y_move_neg = base.GenerateCoordinate(0, -1, tileX, tileY);
+        var x_move_neg = base.GenerateCoordinate(-1, 0, tileX, tileY);
 
-        xMovementPost.AddRange(yMovementPost);
-        xMovementPost.AddRange(xMovementNeg);
-        xMovementPost.AddRange(yMovementNeg);
-        return xMovementPost;
+        x_move_pos.AddRange(y_move_pos);
+        x_move_pos.AddRange(x_move_neg);
+        x_move_pos.AddRange(y_move_neg);
+        return x_move_pos;
     }
 }

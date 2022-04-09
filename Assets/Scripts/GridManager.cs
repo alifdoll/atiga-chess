@@ -9,26 +9,26 @@ public class GridManager : MonoBehaviour
 
     #region properties and stuff
     [SerializeField] private int width, height;
-    [SerializeField] private GameObject prefabTile;
-    [SerializeField] private Camera mainCamera;
+    [SerializeField] private GameObject prefab_tile;
+    [SerializeField] private Camera main_camera;
     [SerializeField] GameObject board;
-    [SerializeField] GameObject piecePrefab;
+    [SerializeField] GameObject piece_prefab;
 
-    private GameObject[,] tilePositions = new GameObject[8, 8];
+    private GameObject[,] tile_positions = new GameObject[8, 8];
 
-    private GameObject[,] destroyedChessPiece = new GameObject[8, 8];
+    private GameObject[,] destroyed_chess_piece = new GameObject[8, 8];
 
-    private GameObject[] playerBlack = new GameObject[16];
-    private GameObject[] playerWhite = new GameObject[16];
+    private GameObject[] player_black = new GameObject[16];
+    private GameObject[] player_white = new GameObject[16];
 
-    private Dictionary<Vector2, GameObject> tilesMap = new Dictionary<Vector2, GameObject>();
+    private Dictionary<Vector2, GameObject> tiles_map = new Dictionary<Vector2, GameObject>();
 
-    private string[] pieceOrder = new string[16] {
+    private string[] piece_order = new string[16] {
     "P","P","P","P","P","P","P","P",
     "R","K","B","KG","Q","B","K","R"
     };
 
-    private Dictionary<string, Type> pieceMap = new Dictionary<string, Type>() {
+    private Dictionary<string, Type> piece_map = new Dictionary<string, Type>() {
         {"P", typeof(Pawn)},
         {"R", typeof(Rook)},
         {"K", typeof(Knight)},
@@ -39,16 +39,16 @@ public class GridManager : MonoBehaviour
 
 
 
-    private GameObject currentlySelectedPiece = null;
-    private List<Vector2Int> movePaths = new List<Vector2Int>();
-    private Color currentPlayer = Color.white;
+    private GameObject currently_selected_piece = null;
+    private List<Vector2Int> move_paths = new List<Vector2Int>();
+    private Color current_player = Color.white;
 
 
-    private bool isKingDie = false;
-    public List<Vector2Int> MovePaths { get => movePaths; set => movePaths = value; }
-    public Color CurrentPlayer { get => currentPlayer; set => currentPlayer = value; }
-    public bool IsKingDie { get => isKingDie; set => isKingDie = value; }
-    public GameObject CurrentlySelectedPiece { get => currentlySelectedPiece; set => currentlySelectedPiece = value; }
+    private bool is_king_die = false;
+    public List<Vector2Int> MovePaths { get => move_paths; set => move_paths = value; }
+    public Color CurrentPlayer { get => current_player; set => current_player = value; }
+    public bool IsKingDie { get => is_king_die; set => is_king_die = value; }
+    public GameObject CurrentlySelectedPiece { get => currently_selected_piece; set => currently_selected_piece = value; }
     #endregion
     #region grid generator
 
@@ -60,7 +60,7 @@ public class GridManager : MonoBehaviour
         GenerateBoard();
 
         // Lalu generate tiap bidak
-        GeneratePieces(tilePositions);
+        GeneratePieces(tile_positions);
     }
 
 
@@ -75,7 +75,7 @@ public class GridManager : MonoBehaviour
                 float size = 1.2f;
 
                 // Instantiate tiap sel papan menjadi gameobject
-                GameObject newTile = Instantiate(prefabTile, new Vector3(x * size, y * size), Quaternion.identity);
+                GameObject newTile = Instantiate(prefab_tile, new Vector3(x * size, y * size), Quaternion.identity);
 
                 // Buat tiap sel menjadi child dari gameobject board
                 newTile.transform.parent = board.transform;
@@ -86,13 +86,13 @@ public class GridManager : MonoBehaviour
                 newTile.GetComponent<Tile>().Init(isOffset, x, y);
 
                 // Simpan posisi tiap sel papan
-                tilePositions[x, y] = newTile;
-                tilesMap[new Vector2(newTile.transform.position.x, newTile.transform.position.y)] = newTile;
+                tile_positions[x, y] = newTile;
+                tiles_map[new Vector2(newTile.transform.position.x, newTile.transform.position.y)] = newTile;
             }
         }
 
         // Posisikan kamera selalu berada pada posisi papan
-        mainCamera.transform.position = new Vector3((float)width / 4 - 0.82f, (float)height / 2 - 0.31f, -10);
+        main_camera.transform.position = new Vector3((float)width / 4 - 0.82f, (float)height / 2 - 0.31f, -10);
     }
 
 
@@ -100,64 +100,64 @@ public class GridManager : MonoBehaviour
     private void GeneratePieces(GameObject[,] chessBoard)
     {
         // Generate bidak hitam dan putih
-        playerWhite = CreatePiece(Color.white);
-        playerBlack = CreatePiece(Color.black);
+        player_white = CreatePiece(Color.white);
+        player_black = CreatePiece(Color.black);
 
         // Set posisi bidak hitam dan putih
-        PlacePiece(1, 0, playerWhite, chessBoard);
-        PlacePiece(6, 7, playerBlack, chessBoard);
+        PlacePiece(1, 0, player_white, chessBoard);
+        PlacePiece(6, 7, player_black, chessBoard);
     }
 
 
 
     // Method untuk generate tiap bidak
-    private GameObject[] CreatePiece(Color32 teamColor)
+    private GameObject[] CreatePiece(Color32 team_color)
     {
-        GameObject[] newPiece = new GameObject[16];
+        GameObject[] new_piece = new GameObject[16];
         // TILE AVAILABLE WHEN PLACED WITH PIECE
-        for (int i = 0; i < newPiece.Length; i++)
+        for (int i = 0; i < new_piece.Length; i++)
         {
             // Buat gameobject nya
-            GameObject pieceObj = Instantiate(piecePrefab, new Vector3(1, 1), Quaternion.identity);
+            GameObject piece_obj = Instantiate(piece_prefab, new Vector3(1, 1), Quaternion.identity);
 
             // Rotate -180 untuk tim hitam
-            if (teamColor == Color.black) pieceObj.transform.localRotation = Quaternion.Euler(0f, 0f, -180f);
+            if (team_color == Color.black) piece_obj.transform.localRotation = Quaternion.Euler(0f, 0f, -180f);
 
             // Ambil tipe bidak
-            Type pieceTypes = pieceMap[pieceOrder[i]];
+            Type piece_types = piece_map[piece_order[i]];
 
             // Destroy(GetComponent<Piece>());
 
             // Beri tipe pada gameobject bidak
-            Piece createPiece = pieceObj.AddComponent(pieceTypes) as Piece;
+            Piece create_piece = piece_obj.AddComponent(piece_types) as Piece;
 
             // Setup sprite dan tim bidak
-            createPiece.SetupPiece(teamColor);
+            create_piece.SetupTeamColor(team_color);
 
             // Beri nama pada gameobject bidak
-            pieceObj.name = pieceTypes.Name;
+            piece_obj.name = piece_types.Name;
 
-            newPiece[i] = pieceObj;
+            new_piece[i] = piece_obj;
         }
-        return newPiece;
+        return new_piece;
     }
 
 
 
     // Method untuk mengatur posisi tiap bidak catur
-    private void PlacePiece(int pawn, int royalty, GameObject[] playerChess, GameObject[,] chessBoard)
+    private void PlacePiece(int pawn, int royalty, GameObject[] player_chess, GameObject[,] chess_board)
     {
         for (int i = 0; i < 8; i++)
         {
             // Set Posisi bidak pawn
-            playerChess[i].GetComponent<Piece>().Place(chessBoard[i, pawn]);
+            player_chess[i].GetComponent<Piece>().Place(chess_board[i, pawn]);
             // Set tile gameobject sebagai parent dari gameobject bidak
-            playerChess[i].transform.SetParent(chessBoard[i, pawn].transform);
+            player_chess[i].transform.SetParent(chess_board[i, pawn].transform);
 
             // Set Posisi bidak royalti
-            playerChess[i + 8].GetComponent<Piece>().Place(chessBoard[i, royalty]);
+            player_chess[i + 8].GetComponent<Piece>().Place(chess_board[i, royalty]);
             // Set tile gameobject sebagai parent dari gameobject bidak
-            playerChess[i + 8].transform.SetParent(chessBoard[i, royalty].transform);
+            player_chess[i + 8].transform.SetParent(chess_board[i, royalty].transform);
         }
     }
     #endregion
@@ -167,7 +167,7 @@ public class GridManager : MonoBehaviour
     #region methods
     public Vector2Int GetTilePosition(Tile tile)
     {
-        if (tilePositions[tile.X, tile.Y] != null)
+        if (tile_positions[tile.X, tile.Y] != null)
         {
             return new Vector2Int(tile.X, tile.Y);
         }
@@ -178,12 +178,14 @@ public class GridManager : MonoBehaviour
     {
         try
         {
-            return tilePositions[x, y];
+            return tile_positions[x, y];
         }
         catch (Exception e)
         {
+            Debug.Log(e.Message);
             return null;
         }
+
     }
 
 
@@ -191,14 +193,14 @@ public class GridManager : MonoBehaviour
     {
         return CurrentlySelectedPiece.GetComponent<Piece>();
     }
-    public void ActivatePath(List<Vector2Int> listPath, GameObject piece)
+    public void ActivatePath(List<Vector2Int> list_path, GameObject piece)
     {
-        MovePaths = listPath;
-        for (int i = 0; i < listPath.Count; i++)
+        MovePaths = list_path;
+        for (int i = 0; i < list_path.Count; i++)
         {
-            Vector2Int path = listPath[i];
-            Tile tile = tilePositions[path.x, path.y].GetComponent<Tile>();
-            if (tile.State != TileState.State.Unavailable)
+            Vector2Int path = list_path[i];
+            Tile tile = tile_positions[path.x, path.y].GetComponent<Tile>();
+            if (tile.State == TileState.State.Move)
             {
                 tile.GetComponent<Tile>().ActivateHighlight(piece);
             }
@@ -206,12 +208,12 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void DeactivatePath(List<Vector2Int> listPath)
+    public void DeactivatePath(List<Vector2Int> list_path)
     {
-        for (int i = 0; i < listPath.Count; i++)
+        for (int i = 0; i < list_path.Count; i++)
         {
-            Vector2Int path = listPath[i];
-            Tile tile = tilePositions[path.x, path.y].GetComponent<Tile>();
+            Vector2Int path = list_path[i];
+            Tile tile = tile_positions[path.x, path.y].GetComponent<Tile>();
             tile.GetComponent<Tile>().DeactivateHighlight();
         }
         MovePaths.Clear();

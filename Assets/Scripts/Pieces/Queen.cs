@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Queen : Piece
 {
-    public override void SetupPiece(Color32 teamColor)
+    public override void SetupTeamColor(Color32 teamColor)
     {
-        base.SetupPiece(teamColor);
+        base.SetupTeamColor(teamColor);
         if (teamColor == Color.white)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/w_queen");
@@ -19,29 +19,29 @@ public class Queen : Piece
 
     public override List<Vector2Int> CreateMovePath(int tileX, int tileY)
     {
-        var horizontalRight = base.GenerateCoordinate(team, 1, 0, tileX, tileY);
-        var horizontalLeft = base.GenerateCoordinate(team, -1, 0, tileX, tileY);
+        var horizontal_right = base.GenerateCoordinate(1, 0, tileX, tileY);
+        var horizontal_left = base.GenerateCoordinate(-1, 0, tileX, tileY);
 
-        var verticalUp = base.GenerateCoordinate(team, 0, 1, tileX, tileY);
-        var verticalDown = base.GenerateCoordinate(team, 0, -1, tileX, tileY);
+        var vertical_up = base.GenerateCoordinate(0, 1, tileX, tileY);
+        var vertical_down = base.GenerateCoordinate(0, -1, tileX, tileY);
 
-        var diagonalUpRight = base.GenerateCoordinate(team, 1, 1, tileX, tileY);
-        var diagonalUpLeft = base.GenerateCoordinate(team, -1, 1, tileX, tileY);
+        var diagonal_up_right = base.GenerateCoordinate(1, 1, tileX, tileY);
+        var diagonal_up_left = base.GenerateCoordinate(-1, 1, tileX, tileY);
 
-        var diagonalDownLeft = base.GenerateCoordinate(team, -1, -1, tileX, tileY);
-        var diagonalDownRight = base.GenerateCoordinate(team, 1, -1, tileX, tileY);
+        var diagonal_down_left = base.GenerateCoordinate(-1, -1, tileX, tileY);
+        var diagonal_down_right = base.GenerateCoordinate(1, -1, tileX, tileY);
 
-        horizontalLeft.AddRange(horizontalRight);
+        horizontal_left.AddRange(horizontal_right);
 
-        horizontalLeft.AddRange(verticalUp);
-        horizontalLeft.AddRange(verticalDown);
+        horizontal_left.AddRange(vertical_up);
+        horizontal_left.AddRange(vertical_down);
 
-        horizontalLeft.AddRange(diagonalUpRight);
-        horizontalLeft.AddRange(diagonalUpLeft);
+        horizontal_left.AddRange(diagonal_up_right);
+        horizontal_left.AddRange(diagonal_up_left);
 
-        horizontalLeft.AddRange(diagonalDownLeft);
-        horizontalLeft.AddRange(diagonalDownRight);
+        horizontal_left.AddRange(diagonal_down_left);
+        horizontal_left.AddRange(diagonal_down_right);
 
-        return horizontalLeft;
+        return horizontal_left;
     }
 }

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Bishop : Piece
 {
-    public override void SetupPiece(Color32 teamColor)
+    public override void SetupTeamColor(Color32 teamColor)
     {
-        base.SetupPiece(teamColor);
+        base.SetupTeamColor(teamColor);
         if (teamColor == Color.white)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/w_bishop");
@@ -20,17 +20,17 @@ public class Bishop : Piece
 
     public override List<Vector2Int> CreateMovePath(int tileX, int tileY)
     {
-        var diagonalUpRight = base.GenerateCoordinate(team, 1, 1, tileX, tileY);
-        var diagonalUpLeft = base.GenerateCoordinate(team, -1, 1, tileX, tileY);
+        var diagonal_up_right = base.GenerateCoordinate(1, 1, tileX, tileY);
+        var diagonal_up_left = base.GenerateCoordinate(-1, 1, tileX, tileY);
 
-        var diagonalDownRight = base.GenerateCoordinate(team, 1, -1, tileX, tileY);
-        var diagonalDownLeft = base.GenerateCoordinate(team, -1, -1, tileX, tileY);
+        var diagonal_down_right = base.GenerateCoordinate(1, -1, tileX, tileY);
+        var diagonal_down_left = base.GenerateCoordinate(-1, -1, tileX, tileY);
 
-        diagonalUpRight.AddRange(diagonalUpLeft);
-        diagonalUpRight.AddRange(diagonalDownRight);
-        diagonalUpRight.AddRange(diagonalDownLeft);
+        diagonal_up_right.AddRange(diagonal_up_left);
+        diagonal_up_right.AddRange(diagonal_down_right);
+        diagonal_up_right.AddRange(diagonal_down_left);
 
-        return diagonalUpRight;
+        return diagonal_up_right;
 
     }
 }

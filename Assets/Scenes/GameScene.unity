@@ -237,10 +237,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 16
   height: 9
-  prefabTile: {fileID: 87320586702915078, guid: 893cb282a51b9914188e4fafd9db7f98, type: 3}
-  mainCamera: {fileID: 519420031}
+  prefab_tile: {fileID: 87320586702915078, guid: 893cb282a51b9914188e4fafd9db7f98, type: 3}
+  main_camera: {fileID: 519420031}
   board: {fileID: 2109227188}
-  piecePrefab: {fileID: 3599512355135992470, guid: 05cc6807898cc314ab61c14259c9e3bc, type: 3}
+  piece_prefab: {fileID: 3599512355135992470, guid: 05cc6807898cc314ab61c14259c9e3bc, type: 3}
 --- !u!4 &1175375519
 Transform:
   m_ObjectHideFlags: 0

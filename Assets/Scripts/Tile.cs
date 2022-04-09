@@ -117,7 +117,6 @@ public class Tile : MonoBehaviour
             Debug.Log(this.State.ToString());
             if (GetGridManager().CurrentlySelectedPiece == null)
             {
-                Debug.Log("TEST");
                 this.state = TileState.State.Selected;
                 GameObject chessObj = gameObject.transform.GetChild(2).gameObject;
                 gridManager.MovePaths = CreatePath();
@@ -126,7 +125,6 @@ public class Tile : MonoBehaviour
             }
             else
             {
-                Debug.Log("TEST");
                 gridManager.DeactivatePath(gridManager.MovePaths);
                 gridManager.CurrentlySelectedPiece = gameObject.transform.GetChild(2).gameObject;
                 gridManager.MovePaths = CreatePath();
@@ -136,7 +134,6 @@ public class Tile : MonoBehaviour
         }
         else if (this.State == TileState.State.Move)
         {
-            Debug.Log("TEST");
             gridManager.GetSelectedPiece().Move(gameObject);
             this.State = TileState.State.Available;
             gridManager.DeactivatePath(gridManager.MovePaths);
@@ -144,7 +141,6 @@ public class Tile : MonoBehaviour
         }
         else if (this.State == TileState.State.Enemy)
         {
-            Debug.Log("TEST");
             Destroy(GetPieceGameObject());
             gridManager.GetSelectedPiece().Move(gameObject);
             this.State = TileState.State.Available;
@@ -152,7 +148,6 @@ public class Tile : MonoBehaviour
         }
         else if (this.State == TileState.State.Selected)
         {
-            Debug.Log("TEST");
             gridManager.DeactivatePath(gridManager.MovePaths);
             gridManager.CurrentlySelectedPiece = null;
             this.state = TileState.State.Available;

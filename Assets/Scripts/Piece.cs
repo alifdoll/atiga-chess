@@ -9,13 +9,13 @@ public class Piece : MonoBehaviour
     public Color32 team;
 
 
-    [SerializeField] protected GameObject currentTile = null;
+    [SerializeField] protected GameObject current_tile = null;
 
 
-    public virtual void SetupPiece(Color32 teamColor)
+    public virtual void SetupTeamColor(Color32 team_color)
     {
         // Set Team Bidak
-        team = teamColor;
+        team = team_color;
     }
 
     public virtual void Place(GameObject tile)
@@ -23,7 +23,7 @@ public class Piece : MonoBehaviour
         // Posisikan bidak pada posisi cell papan catur
         gameObject.transform.position = tile.transform.position;
 
-        currentTile = tile;
+        current_tile = tile;
         tile.GetComponent<Tile>().State = TileState.State.Available;
 
     }
@@ -33,37 +33,37 @@ public class Piece : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public virtual void Move(GameObject selectedTile)
+    public virtual void Move(GameObject selected_tile)
     {
-        currentTile.GetComponent<Tile>().State = TileState.State.Unavailable;
-        this.transform.position = selectedTile.transform.position;
-        this.transform.SetParent(selectedTile.transform);
-        currentTile = selectedTile;
+        current_tile.GetComponent<Tile>().State = TileState.State.Unavailable;
+        this.transform.position = selected_tile.transform.position;
+        this.transform.SetParent(selected_tile.transform);
+        current_tile = selected_tile;
     }
 
-    public virtual List<Vector2Int> CreateMovePath(int tileX, int tileY)
+    public virtual List<Vector2Int> CreateMovePath(int tile_x, int tile_y)
     {
-        return GenerateCoordinate(team, 0, 1, tileX, tileY, false, 2);
+        return GenerateCoordinate(0, 1, tile_x, tile_y, false, 2);
     }
 
-    public virtual List<Vector2Int> GenerateCoordinate(Color team, int xmove, int ymove, int xpos, int ypos, bool canSkip = false, int movement = 16)
+    public virtual List<Vector2Int> GenerateCoordinate(int x_move, int y_move, int x_pos, int y_pos, bool can_skip = false, int movement = 16)
     {
-        ymove = (team == Color.white) ? ymove : -ymove;
+        y_move = (team == Color.white) ? y_move : -y_move;
         List<Vector2Int> paths = new List<Vector2Int>();
         int enemy = 0;
         for (int i = 1; i <= movement + 1; i++)
         {
             if (enemy > 0) break;
-            xpos += xmove;
-            ypos += ymove;
-            GameObject tile = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTileAtPosition(xpos, ypos);
+            x_pos += x_move;
+            y_pos += y_move;
+            GameObject tile = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTileAtPosition(x_pos, y_pos);
             if (tile == null) continue;
-            if (!canSkip)
+            if (!can_skip)
             {
                 if (tile.transform.childCount >= 3) enemy++;
             }
             tile.GetComponent<Tile>().State = ValidatePath(tile);
-            paths.Add(new Vector2Int(xpos, ypos));
+            paths.Add(new Vector2Int(x_pos, y_pos));
 
             Debug.Log(tile.GetComponent<Tile>().State.ToString());
         }
@@ -81,13 +81,13 @@ public class Piece : MonoBehaviour
         {
             var check = tile.transform.GetChild(2).GetComponent<Piece>();
 
-            if ((Color)check.team == this.team)
+            if ((Color)check.team != this.team)
             {
-                return TileState.State.Unavailable;
+                return TileState.State.Enemy;
             }
             else
             {
-                return TileState.State.Enemy;
+                return TileState.State.Available;
             }
 
         }
@@ -101,7 +101,7 @@ public class Piece : MonoBehaviour
 
     public GameObject GetCurrentTile()
     {
-        return currentTile;
+        return current_tile;
     }
 
 

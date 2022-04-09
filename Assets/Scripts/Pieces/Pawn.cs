@@ -6,9 +6,9 @@ public class Pawn : Piece
 {
     private int movement = 2;
     private Vector3 starting_position = new Vector3();
-    public override void SetupPiece(Color32 teamColor)
+    public override void SetupTeamColor(Color32 teamColor)
     {
-        base.SetupPiece(teamColor);
+        base.SetupTeamColor(teamColor);
         if (teamColor == Color.white)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/w_pawn");
@@ -35,7 +35,7 @@ public class Pawn : Piece
         if (movement < 1) movement = 1;
 
 
-        var paths = GenerateCoordinate(team, 0, 1, tileX, tileY, movement: movement);
+        var paths = GenerateCoordinate(0, 1, tileX, tileY, movement: movement);
         var right = checkEnemyPawn(tileX + 1, tileY);
         var left = checkEnemyPawn(tileX - 1, tileY);
 
@@ -43,8 +43,8 @@ public class Pawn : Piece
         {
             if (right && left)
             {
-                var rightEnemy = GenerateCoordinate(team, 1, 1, tileX, tileY, movement: 1, canSkip: true);
-                var leftEnemy = GenerateCoordinate(team, -1, 1, tileX, tileY, movement: 1, canSkip: true);
+                var rightEnemy = GenerateCoordinate(1, 1, tileX, tileY, movement: 1, can_skip: true);
+                var leftEnemy = GenerateCoordinate(-1, 1, tileX, tileY, movement: 1, can_skip: true);
 
                 rightEnemy.AddRange(leftEnemy);
                 rightEnemy.AddRange(paths);
@@ -52,13 +52,13 @@ public class Pawn : Piece
             }
             else if (left)
             {
-                var enemy = GenerateCoordinate(team, -1, 1, tileX, tileY, movement: 1, canSkip: true);
+                var enemy = GenerateCoordinate(-1, 1, tileX, tileY, movement: 1, can_skip: true);
                 enemy.AddRange(paths);
                 return enemy;
             }
             else
             {
-                var enemy = GenerateCoordinate(team, 1, 1, tileX, tileY, movement: 1, canSkip: true);
+                var enemy = GenerateCoordinate(1, 1, tileX, tileY, movement: 1, can_skip: true);
                 enemy.AddRange(paths);
                 return enemy;
             }
@@ -76,19 +76,19 @@ public class Pawn : Piece
         else return false;
     }
 
-    public override List<Vector2Int> GenerateCoordinate(Color team, int xmove, int ymove, int xpos, int ypos, bool canSkip = false, int movement = 16)
+    public override List<Vector2Int> GenerateCoordinate(int x_move, int y_move, int x_pos, int y_pos, bool can_skip = false, int movement = 16)
     {
-        ymove = (team == Color.white) ? ymove : -ymove;
+        y_move = (team == Color.white) ? y_move : -y_move;
         List<Vector2Int> paths = new List<Vector2Int>();
         int enemy = 0;
         for (int i = 1; i <= movement; i++)
         {
             if (enemy > 0) break;
-            xpos += xmove;
-            ypos += ymove;
-            GameObject tile = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTileAtPosition(xpos, ypos);
+            x_pos += x_move;
+            y_pos += y_move;
+            GameObject tile = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTileAtPosition(x_pos, y_pos);
             if (tile == null) continue;
-            if (!canSkip)
+            if (!can_skip)
             {
                 if (tile.transform.childCount >= 3)
                 {
@@ -101,7 +101,7 @@ public class Pawn : Piece
                 }
             }
             tile.GetComponent<Tile>().State = ValidatePath(tile);
-            paths.Add(new Vector2Int(xpos, ypos));
+            paths.Add(new Vector2Int(x_pos, y_pos));
         }
         return paths;
     }
