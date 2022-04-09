@@ -48,7 +48,7 @@ public class King : Piece
 
     public override void Eat()
     {
-        FindObjectOfType<GridManager>().GetComponent<GridManager>().isKingDie = true;
+        FindObjectOfType<GridManager>().GetComponent<GridManager>().IsKingDie = true;
         Destroy(gameObject);
     }
 }

@@ -21,8 +21,6 @@ public class GridManager : MonoBehaviour
     private GameObject[] playerBlack = new GameObject[16];
     private GameObject[] playerWhite = new GameObject[16];
 
-    public List<Vector2Int> movePaths = new List<Vector2Int>();
-
     private Dictionary<Vector2, GameObject> tilesMap = new Dictionary<Vector2, GameObject>();
 
     private string[] pieceOrder = new string[16] {
@@ -39,14 +37,19 @@ public class GridManager : MonoBehaviour
         {"KG", typeof(King)},
     };
 
-    public Color currentPlayer = Color.white;
 
-    public bool isKingDie = false;
 
-    public GameObject CurrentlySelectedPiece = null;
+    private GameObject currentlySelectedPiece = null;
+    private List<Vector2Int> movePaths = new List<Vector2Int>();
+    private Color currentPlayer = Color.white;
+
+
+    private bool isKingDie = false;
+    public List<Vector2Int> MovePaths { get => movePaths; set => movePaths = value; }
+    public Color CurrentPlayer { get => currentPlayer; set => currentPlayer = value; }
+    public bool IsKingDie { get => isKingDie; set => isKingDie = value; }
+    public GameObject CurrentlySelectedPiece { get => currentlySelectedPiece; set => currentlySelectedPiece = value; }
     #endregion
-
-
     #region grid generator
 
 
@@ -190,7 +193,7 @@ public class GridManager : MonoBehaviour
     }
     public void ActivatePath(List<Vector2Int> listPath, GameObject piece)
     {
-        movePaths = listPath;
+        MovePaths = listPath;
         for (int i = 0; i < listPath.Count; i++)
         {
             Vector2Int path = listPath[i];
@@ -211,7 +214,7 @@ public class GridManager : MonoBehaviour
             Tile tile = tilePositions[path.x, path.y].GetComponent<Tile>();
             tile.GetComponent<Tile>().DeactivateHighlight();
         }
-        movePaths.Clear();
+        MovePaths.Clear();
     }
     #endregion
 }

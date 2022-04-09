@@ -8,28 +8,23 @@ using UnityEngine.EventSystems;
 public class Tile : MonoBehaviour
 {
     #region Properties and Stuff
-    private Color highlightColor = new Color32(213, 237, 251, 255);
-
-    // Debug Purposes
     [SerializeField] private GameObject highlight;
     [SerializeField] private GameObject plate;
 
+    // Debug Purposes
     [SerializeField] private TileState.State stateTest;
-
-    private SpriteRenderer tileRenderer;
 
     private int x = 0;
     private int y = 0;
-
     private TileState.State state = TileState.State.Unavailable;
 
     public int X { get => x; set => x = value; }
     public int Y { get => y; set => y = value; }
-    internal TileState.State State { get => state; set => state = value; }
-
+    public TileState.State State { get => state; set => state = value; }
 
     #endregion
 
+    // FOR DEBUG PURPOSES
     private void Start()
     {
         stateTest = this.state;
@@ -39,11 +34,13 @@ public class Tile : MonoBehaviour
     {
         stateTest = this.state;
     }
+    // FOR DEBUG PURPOSES
+
     public void Init(bool isOffset, int xVal, int yVal)
     {
         this.x = xVal;
         this.y = yVal;
-        tileRenderer = gameObject.GetComponent<SpriteRenderer>();
+        SpriteRenderer tileRenderer = gameObject.GetComponent<SpriteRenderer>();
         if (isOffset) tileRenderer.color = Color.white;
         else tileRenderer.color = Color.blue;
     }
@@ -93,7 +90,7 @@ public class Tile : MonoBehaviour
         // Debug.Log(this.SelectedPiece.GetComponent<Piece>().team);
         if (gameObject.transform.childCount >= 3)
         {
-            if (GetGridManager().currentPlayer == GetPiece().team)
+            if (GetGridManager().CurrentPlayer == GetPiece().team)
             {
                 highlight.SetActive(true);
             }
@@ -113,45 +110,50 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         var gridManager = GetGridManager();
-        Debug.Log(this.state.ToString());
+
 
         if (this.State == TileState.State.Available /*&& GetGridManager().currentPlayer == GetPiece().team*/)
         {
+            Debug.Log(this.State.ToString());
             if (GetGridManager().CurrentlySelectedPiece == null)
             {
+                Debug.Log("TEST");
                 this.state = TileState.State.Selected;
                 GameObject chessObj = gameObject.transform.GetChild(2).gameObject;
-                gridManager.movePaths = CreatePath();
-                gridManager.GetComponent<GridManager>().ActivatePath(gridManager.movePaths, chessObj);
+                gridManager.MovePaths = CreatePath();
+                gridManager.GetComponent<GridManager>().ActivatePath(gridManager.MovePaths, chessObj);
                 gridManager.CurrentlySelectedPiece = gameObject.transform.GetChild(2).gameObject;
             }
             else
             {
-                gridManager.DeactivatePath(gridManager.movePaths);
+                Debug.Log("TEST");
+                gridManager.DeactivatePath(gridManager.MovePaths);
                 gridManager.CurrentlySelectedPiece = gameObject.transform.GetChild(2).gameObject;
-                gridManager.movePaths = CreatePath();
-                gridManager.ActivatePath(gridManager.movePaths, gridManager.CurrentlySelectedPiece);
+                gridManager.MovePaths = CreatePath();
+                gridManager.ActivatePath(gridManager.MovePaths, gridManager.CurrentlySelectedPiece);
             }
 
         }
         else if (this.State == TileState.State.Move)
         {
+            Debug.Log("TEST");
             gridManager.GetSelectedPiece().Move(gameObject);
             this.State = TileState.State.Available;
-            gridManager.DeactivatePath(gridManager.movePaths);
-            gridManager.currentPlayer = (gridManager.currentPlayer == Color.white) ? Color.black : Color.white;
+            gridManager.DeactivatePath(gridManager.MovePaths);
+            gridManager.CurrentPlayer = (gridManager.CurrentPlayer == Color.white) ? Color.black : Color.white;
         }
         else if (this.State == TileState.State.Enemy)
         {
+            Debug.Log("TEST");
             Destroy(GetPieceGameObject());
-            gridManager.CurrentlySelectedPiece.transform.position = gameObject.transform.position;
-            gridManager.CurrentlySelectedPiece.transform.SetParent(gameObject.transform);
-            this.State = TileState.State.Unavailable;
-            gridManager.DeactivatePath(gridManager.movePaths);
+            gridManager.GetSelectedPiece().Move(gameObject);
+            this.State = TileState.State.Available;
+            gridManager.DeactivatePath(gridManager.MovePaths);
         }
         else if (this.State == TileState.State.Selected)
         {
-            gridManager.DeactivatePath(gridManager.movePaths);
+            Debug.Log("TEST");
+            gridManager.DeactivatePath(gridManager.MovePaths);
             gridManager.CurrentlySelectedPiece = null;
             this.state = TileState.State.Available;
         }

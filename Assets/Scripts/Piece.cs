@@ -28,6 +28,11 @@ public class Piece : MonoBehaviour
 
     }
 
+    public virtual void Eat()
+    {
+        Destroy(gameObject);
+    }
+
     public virtual void Move(GameObject selectedTile)
     {
         currentTile.GetComponent<Tile>().State = TileState.State.Unavailable;
@@ -35,6 +40,7 @@ public class Piece : MonoBehaviour
         this.transform.SetParent(selectedTile.transform);
         currentTile = selectedTile;
     }
+
     public virtual List<Vector2Int> CreateMovePath(int tileX, int tileY)
     {
         return GenerateCoordinate(team, 0, 1, tileX, tileY, false, 2);
@@ -64,16 +70,12 @@ public class Piece : MonoBehaviour
         return paths;
     }
 
-    public virtual void Eat()
-    {
-        Destroy(gameObject);
-    }
 
     public TileState.State ValidatePath(GameObject tile)
     {
         if (tile.transform.childCount < 3)
         {
-            return TileState.State.Available;
+            return TileState.State.Move;
         }
         else if (tile.transform.childCount == 3)
         {
@@ -81,7 +83,7 @@ public class Piece : MonoBehaviour
 
             if ((Color)check.team == this.team)
             {
-                return TileState.State.Available;
+                return TileState.State.Unavailable;
             }
             else
             {
