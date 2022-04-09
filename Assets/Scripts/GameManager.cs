@@ -5,10 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public Team WINNER;
+
     private void Awake()
     {
         SetUpSingleton();
     }
+
     private void SetUpSingleton()
     {
         int numOfSession = FindObjectsOfType<GameManager>().Length;
@@ -26,6 +29,11 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         SceneManager.LoadScene("GameScene");
+    }
+
+    public void EndGame()
+    {
+        SceneManager.LoadScene("GameOverScene");
     }
 
     public void QuitGame()

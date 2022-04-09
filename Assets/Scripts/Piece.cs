@@ -1,18 +1,22 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+public enum Team
+{
+    WHITE,
+    BLACK
+}
+
 public class Piece : MonoBehaviour
 {
+
     // Team Bidak
-    public Color32 team;
+    public Team team;
 
 
     [SerializeField] protected GameObject current_tile = null;
 
 
-    public virtual void SetupTeamColor(Color32 team_color)
+    public virtual void SetupTeamColor(Team team_color)
     {
         // Set Team Bidak
         team = team_color;
@@ -48,7 +52,7 @@ public class Piece : MonoBehaviour
 
     public virtual List<Vector2Int> GenerateCoordinate(int x_move, int y_move, int x_pos, int y_pos, bool can_skip = false, int movement = 16)
     {
-        y_move = (team == Color.white) ? y_move : -y_move;
+        y_move = (team == Team.WHITE) ? y_move : -y_move;
         List<Vector2Int> paths = new List<Vector2Int>();
         int enemy = 0;
         for (int i = 1; i <= movement + 1; i++)
@@ -81,7 +85,7 @@ public class Piece : MonoBehaviour
         {
             var check = tile.transform.GetChild(2).GetComponent<Piece>();
 
-            if ((Color)check.team != this.team)
+            if (check.team != this.team)
             {
                 return TileState.State.Enemy;
             }

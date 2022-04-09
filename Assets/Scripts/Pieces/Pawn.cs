@@ -6,10 +6,10 @@ public class Pawn : Piece
 {
     private int movement = 2;
     private Vector3 starting_position = new Vector3();
-    public override void SetupTeamColor(Color32 teamColor)
+    public override void SetupTeamColor(Team team_color)
     {
-        base.SetupTeamColor(teamColor);
-        if (teamColor == Color.white)
+        base.SetupTeamColor(team_color);
+        if (team_color == Team.WHITE)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/w_pawn");
         }
@@ -68,7 +68,7 @@ public class Pawn : Piece
 
     private bool checkEnemyPawn(int tileX, int tileY)
     {
-        tileY = (team == Color.white) ? tileY + 1 : tileY - 1;
+        tileY = (team == Team.WHITE) ? tileY + 1 : tileY - 1;
         GameObject check = FindObjectOfType<GridManager>().GetComponent<GridManager>().GetTileAtPosition(tileX, tileY);
 
         if (check == null) return false;
@@ -78,7 +78,7 @@ public class Pawn : Piece
 
     public override List<Vector2Int> GenerateCoordinate(int x_move, int y_move, int x_pos, int y_pos, bool can_skip = false, int movement = 16)
     {
-        y_move = (team == Color.white) ? y_move : -y_move;
+        y_move = (team == Team.WHITE) ? y_move : -y_move;
         List<Vector2Int> paths = new List<Vector2Int>();
         int enemy = 0;
         for (int i = 1; i <= movement; i++)
@@ -94,7 +94,7 @@ public class Pawn : Piece
                 {
                     enemy++;
                     var checkpiece = tile.transform.GetChild(2).GetComponent<Piece>();
-                    if (checkpiece.team != (Color)team)
+                    if (checkpiece.team != team)
                     {
                         break;
                     }

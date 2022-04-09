@@ -137,7 +137,7 @@ public class Tile : MonoBehaviour
             gridManager.GetSelectedPiece().Move(gameObject);
             this.State = TileState.State.Available;
             gridManager.DeactivatePath(gridManager.MovePaths);
-            gridManager.CurrentPlayer = (gridManager.CurrentPlayer == Color.white) ? Color.black : Color.white;
+            gridManager.CurrentPlayer = (gridManager.CurrentPlayer == Team.WHITE) ? Team.BLACK : Team.WHITE;
         }
         else if (this.State == TileState.State.Enemy)
         {

@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Bishop : Piece
 {
-    public override void SetupTeamColor(Color32 teamColor)
+    public override void SetupTeamColor(Team team_color)
     {
-        base.SetupTeamColor(teamColor);
-        if (teamColor == Color.white)
+        base.SetupTeamColor(team_color);
+        if (team_color == Team.WHITE)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/w_bishop");
         }

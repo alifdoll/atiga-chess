@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class GridManager : MonoBehaviour
 {
 
@@ -37,16 +36,14 @@ public class GridManager : MonoBehaviour
         {"KG", typeof(King)},
     };
 
-
-
     private GameObject currently_selected_piece = null;
     private List<Vector2Int> move_paths = new List<Vector2Int>();
-    private Color current_player = Color.white;
+    private Team current_player = Team.WHITE;
 
 
     private bool is_king_die = false;
     public List<Vector2Int> MovePaths { get => move_paths; set => move_paths = value; }
-    public Color CurrentPlayer { get => current_player; set => current_player = value; }
+    public Team CurrentPlayer { get => current_player; set => current_player = value; }
     public bool IsKingDie { get => is_king_die; set => is_king_die = value; }
     public GameObject CurrentlySelectedPiece { get => currently_selected_piece; set => currently_selected_piece = value; }
     #endregion
@@ -100,8 +97,8 @@ public class GridManager : MonoBehaviour
     private void GeneratePieces(GameObject[,] chessBoard)
     {
         // Generate bidak hitam dan putih
-        player_white = CreatePiece(Color.white);
-        player_black = CreatePiece(Color.black);
+        player_white = CreatePiece(Team.WHITE);
+        player_black = CreatePiece(Team.BLACK);
 
         // Set posisi bidak hitam dan putih
         PlacePiece(1, 0, player_white, chessBoard);
@@ -111,7 +108,7 @@ public class GridManager : MonoBehaviour
 
 
     // Method untuk generate tiap bidak
-    private GameObject[] CreatePiece(Color32 team_color)
+    private GameObject[] CreatePiece(Team team_color)
     {
         GameObject[] new_piece = new GameObject[16];
         // TILE AVAILABLE WHEN PLACED WITH PIECE
@@ -121,7 +118,7 @@ public class GridManager : MonoBehaviour
             GameObject piece_obj = Instantiate(piece_prefab, new Vector3(1, 1), Quaternion.identity);
 
             // Rotate -180 untuk tim hitam
-            if (team_color == Color.black) piece_obj.transform.localRotation = Quaternion.Euler(0f, 0f, -180f);
+            if (team_color == Team.BLACK) piece_obj.transform.localRotation = Quaternion.Euler(0f, 0f, -180f);
 
             // Ambil tipe bidak
             Type piece_types = piece_map[piece_order[i]];
@@ -217,6 +214,12 @@ public class GridManager : MonoBehaviour
             tile.GetComponent<Tile>().DeactivateHighlight();
         }
         MovePaths.Clear();
+    }
+
+    public void KingDie(Team winner_team)
+    {
+        is_king_die = true;
+        FindObjectOfType<GameManager>().GetComponent<GameManager>().WINNER = winner_team;
     }
     #endregion
 }
