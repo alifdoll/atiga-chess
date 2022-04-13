@@ -219,6 +219,7 @@ public class GridManager : MonoBehaviour
     {
         is_king_die = true;
         FindObjectOfType<GameManager>().GetComponent<GameManager>().WINNER = winner_team;
+        FindObjectOfType<GameManager>().GetComponent<GameManager>().EndGame();
     }
     #endregion
 }
