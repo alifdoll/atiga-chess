@@ -114,7 +114,6 @@ public class Tile : MonoBehaviour
 
         if (this.State == TileState.State.Available /*&& GetGridManager().currentPlayer == GetPiece().team*/)
         {
-            Debug.Log(this.State.ToString());
             if (GetGridManager().CurrentlySelectedPiece == null)
             {
                 this.state = TileState.State.Selected;
@@ -141,7 +140,7 @@ public class Tile : MonoBehaviour
         }
         else if (this.State == TileState.State.Enemy)
         {
-            Destroy(GetPieceGameObject());
+            GetPieceGameObject().GetComponent<Piece>().Eat();
             gridManager.GetSelectedPiece().Move(gameObject);
             this.State = TileState.State.Available;
             gridManager.DeactivatePath(gridManager.MovePaths);

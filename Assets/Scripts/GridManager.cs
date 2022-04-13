@@ -179,7 +179,6 @@ public class GridManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
             return null;
         }
 
@@ -197,7 +196,7 @@ public class GridManager : MonoBehaviour
         {
             Vector2Int path = list_path[i];
             Tile tile = tile_positions[path.x, path.y].GetComponent<Tile>();
-            if (tile.State == TileState.State.Move)
+            if (tile.State == TileState.State.Move || tile.State == TileState.State.Enemy)
             {
                 tile.GetComponent<Tile>().ActivateHighlight(piece);
             }

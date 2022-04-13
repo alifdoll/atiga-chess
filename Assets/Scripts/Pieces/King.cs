@@ -20,17 +20,17 @@ public class King : Piece
 
     public override List<Vector2Int> CreateMovePath(int tileX, int tileY)
     {
-        var horizontal_right = base.GenerateCoordinate(1, 0, tileX, tileY, movement: 1);
-        var horizontal_left = base.GenerateCoordinate(-1, 0, tileX, tileY, movement: 1);
+        var horizontal_right = base.GenerateCoordinate(1, 0, tileX, tileY, movement: 0);
+        var horizontal_left = base.GenerateCoordinate(-1, 0, tileX, tileY, movement: 0);
 
-        var vertical_up = base.GenerateCoordinate(0, 1, tileX, tileY, movement: 1);
-        var vertical_down = base.GenerateCoordinate(0, -1, tileX, tileY, movement: 1);
+        var vertical_up = base.GenerateCoordinate(0, 1, tileX, tileY, movement: 0);
+        var vertical_down = base.GenerateCoordinate(0, -1, tileX, tileY, movement: 0);
 
-        var diagonal_up_right = base.GenerateCoordinate(1, 1, tileX, tileY, movement: 1);
-        var diagonal_up_left = base.GenerateCoordinate(-1, 1, tileX, tileY, movement: 1);
+        var diagonal_up_right = base.GenerateCoordinate(1, 1, tileX, tileY, movement: 0);
+        var diagonal_up_left = base.GenerateCoordinate(-1, 1, tileX, tileY, movement: 0);
 
-        var diagonal_down_left = base.GenerateCoordinate(-1, -1, tileX, tileY, movement: 1);
-        var diagonal_down_right = base.GenerateCoordinate(1, -1, tileX, tileY, movement: 1);
+        var diagonal_down_left = base.GenerateCoordinate(-1, -1, tileX, tileY, movement: 0);
+        var diagonal_down_right = base.GenerateCoordinate(1, -1, tileX, tileY, movement: 0);
 
         horizontal_left.AddRange(horizontal_right);
 

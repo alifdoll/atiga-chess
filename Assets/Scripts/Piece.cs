@@ -52,6 +52,7 @@ public class Piece : MonoBehaviour
 
     public virtual List<Vector2Int> GenerateCoordinate(int x_move, int y_move, int x_pos, int y_pos, bool can_skip = false, int movement = 16)
     {
+        Debug.Log(movement.ToString());
         y_move = (team == Team.WHITE) ? y_move : -y_move;
         List<Vector2Int> paths = new List<Vector2Int>();
         int enemy = 0;
@@ -68,8 +69,6 @@ public class Piece : MonoBehaviour
             }
             tile.GetComponent<Tile>().State = ValidatePath(tile);
             paths.Add(new Vector2Int(x_pos, y_pos));
-
-            Debug.Log(tile.GetComponent<Tile>().State.ToString());
         }
         return paths;
     }
